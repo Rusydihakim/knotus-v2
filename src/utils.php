@@ -90,7 +90,7 @@ function sendPasswordResetEmail($conn, $email): array
         return ['success' => false, 'message' => 'Failed to save reset token.'];
     }
 
-    $resetLink = "http://sdi-knotus.test/src/pages/reset_password.php?token=$token";
+    $resetLink = "http://knotus-v2.test/src/pages/reset_password.php?token=$token";
 
     $mail = new PHPMailer(true);
 
