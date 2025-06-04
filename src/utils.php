@@ -69,6 +69,7 @@ function loginUser($email, $password): array
 /**
  * @throws RandomException
  */
+
 function sendPasswordResetEmail($conn, $email): array
 {
     $email = mysqli_real_escape_string($conn, $email);
@@ -96,14 +97,14 @@ function sendPasswordResetEmail($conn, $email): array
 
     try {
         $mail->isSMTP();
-        $mail->Host = 'mail.arica-devs.com';
+        $mail->Host = MAIL_HOST;
         $mail->SMTPAuth = true;
-        $mail->Username = 'no-reply@arica-devs.com';
-        $mail->Password = '}8cy1jJVU_X$';
+        $mail->Username = MAIL_USERNAME;
+        $mail->Password = MAIL_PASSWORD;
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port = 587;
 
-        $mail->setFrom('no-reply@arica-devs.com', 'no-reply@arica-devs.com');
+        $mail->setFrom(MAIL_USERNAME, MAIL_USERNAME);
         $mail->addAddress($email);
         $mail->isHTML();
 
@@ -144,7 +145,7 @@ function resetUserPassword($conn, string $token, string $newPassword): array {
 
     $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
 
-    $updateStmt = $conn->prepare("UPDATE user SET password = ?, password_reset_token = NULL, token_expiry = NULL WHERE id = ?");
+    $updateStmt = $conn->prepare("UPDATE user SET password = ?, password_reset_token = NULL, token_expiry = NULL, date_modified = NOW() WHERE id = ?");
     if (!$updateStmt) {
         return ['success' => false, 'message' => 'Database error: ' . $conn->error];
     }
