@@ -94,7 +94,7 @@ function sendPasswordResetEmail($conn, $email): array
     $resetLink = "http://localhost/knotus-v2/src/pages/reset_password.php?token=$token";
 
     $mail = new PHPMailer(true);
-
+    
     try {
         $mail->isSMTP();
         $mail->Host = MAIL_HOST;
@@ -110,11 +110,11 @@ function sendPasswordResetEmail($conn, $email): array
 
         $mail->Subject = 'Password Reset Link';
         $mail->Body = "Click the following link to reset your password:<br><a href='$resetLink'>$resetLink</a>";
-
+        
         $mail->send();
 
         return ['success' => true];
-    } catch (Exception) {
+    } catch (Exception $e) {
         return ['success' => false, 'message' => 'Failed to send email: ' . $mail->ErrorInfo];
     }
 }
